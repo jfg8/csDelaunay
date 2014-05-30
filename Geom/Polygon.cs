@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace VoronoiPolygon {
+namespace csDelaunay {
 	public class Polygon {
 
 		private List<Vector2f> vertices;

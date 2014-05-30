@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace VoronoiPolygon {
+namespace csDelaunay {
 
 	public class SiteList {
 

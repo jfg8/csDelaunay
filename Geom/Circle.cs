@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace VoronoiPolygon {
+namespace csDelaunay {
 	public class Circle {
 
 		public Vector2f center;

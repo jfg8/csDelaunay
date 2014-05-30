@@ -1,4 +1,4 @@
-﻿namespace VoronoiPolygon {
+﻿namespace csDelaunay {
 	
 	public class LR {
 
