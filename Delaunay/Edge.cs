@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace csDelaunay {
+namespace VoronoiPolygon {
 
 	/*
 	 * The line segment connecting the two Sites is part of the Delaunay triangulation

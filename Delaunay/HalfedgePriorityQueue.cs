@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace csDelaunay {
+namespace VoronoiPolygon {
 
 	// Also know as heap
 	public class HalfedgePriorityQueue {

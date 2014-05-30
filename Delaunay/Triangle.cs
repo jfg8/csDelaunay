@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace csDelaunay {
+namespace VoronoiPolygon {
 
 	public class Triangle {
 
