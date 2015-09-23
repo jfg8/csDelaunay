@@ -307,6 +307,11 @@ namespace csDelaunay {
 				while (site != null) {
 					// Loop all corners of the site to calculate the centroid
 					List<Vector2f> region = site.Region(plotBounds);
+					if (region.Count < 1) {
+						site = sites.Next();
+						continue;
+					}
+					
 					Vector2f centroid = Vector2f.zero;
 					float signedArea = 0;
 					float x0 = 0;
