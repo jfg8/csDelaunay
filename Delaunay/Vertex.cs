@@ -82,7 +82,7 @@ namespace csDelaunay {
 			}
 
 			determinant = edge0.a * edge1.b - edge0.b * edge1.a;
-			if (Math.Pow(-1.0, 10) < determinant && determinant < Math.Pow(1.0, -10)) {
+			if (Math.Abs(determinant) < 1E-10) {
 				// The edges are parallel
 				return null;
 			}
