@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Numerics;
 
 namespace csDelaunay {
 
@@ -77,12 +76,12 @@ namespace csDelaunay {
 		 * @param p
 		 * @return
 		 */
-		public Halfedge EdgeListLeftNeighbor(Vector2f p) {
+		public Halfedge EdgeListLeftNeighbor(Vector2 p) {
 			int bucket;
 			Halfedge halfedge;
 
 			// Use hash table to get close to desired halfedge
-			bucket = (int)((p.x - xmin)/deltaX * hashSize);
+			bucket = (int)((p.X - xmin)/deltaX * hashSize);
 			if (bucket < 0) {
 				bucket = 0;
 			}

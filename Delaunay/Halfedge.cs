@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Numerics;
 
 namespace csDelaunay {
 
@@ -74,13 +74,13 @@ namespace csDelaunay {
 			pool.Enqueue(this);
 		}
 
-		public bool IsLeftOf(Vector2f p) {
+		public bool IsLeftOf(Vector2 p) {
 			Site topSite;
 			bool rightOfSite, above, fast;
 			float dxp, dyp, dxs, t1, t2, t3, y1;
 
 			topSite = edge.RightSite;
-			rightOfSite = p.x > topSite.x;
+            rightOfSite = p.X > topSite.x;
 			if (rightOfSite && this.leftRight == LR.LEFT) {
 				return true;
 			}
@@ -89,14 +89,14 @@ namespace csDelaunay {
 			}
 
 			if (edge.a == 1) {
-				dyp = p.y - topSite.y;
-				dxp = p.x - topSite.x;
+				dyp = p.Y - topSite.y;
+				dxp = p.X - topSite.x;
 				fast = false;
 				if ((!rightOfSite && edge.b < 0) || (rightOfSite && edge.b >= 0)) {
 					above = dyp >= edge.b * dxp;
 					fast = above;
 				} else {
-					above = p.x + p.y * edge.b > edge.c;
+					above = p.X + p.Y * edge.b > edge.c;
 					if (edge.b < 0) {
 						above = !above;
 					} 
@@ -112,9 +112,9 @@ namespace csDelaunay {
 					}
 				}
 			} else {
-				y1 = edge.c - edge.a * p.x;
-				t1 = p.y - y1;
-				t2 = p.x - topSite.x;
+				y1 = edge.c - edge.a * p.X;
+				t1 = p.Y - y1;
+				t2 = p.X - topSite.x;
 				t3 = y1 - topSite.y;
 				above = t1 * t1 > t2 * t2 + t3 * t3;
 			}

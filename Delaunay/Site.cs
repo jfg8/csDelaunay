@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Numerics;
 
 namespace csDelaunay {
 
@@ -8,7 +7,7 @@ namespace csDelaunay {
 
 		private static Queue<Site> pool = new Queue<Site>();
 
-		public static Site Create(Vector2f p, int index, float weigth) {
+		public static Site Create(Vector2 p, int index, float weigth) {
 			if (pool.Count > 0) {
 				return pool.Dequeue().Init(p, index, weigth);
 			} else {
@@ -67,18 +66,18 @@ namespace csDelaunay {
 		}
 		
 		private const float EPSILON = 0.005f;
-		private static bool CloseEnough(Vector2f p0, Vector2f p1) {
-			return (p0-p1).magnitude < EPSILON;
+		private static bool CloseEnough(Vector2 p0, Vector2 p1) {
+			return (p0-p1).Length() < EPSILON;
 		}
 		
 		private int siteIndex;
 		public int SiteIndex {get{return siteIndex;} set{siteIndex=value;}}
 		
-		private Vector2f coord;
-		public Vector2f Coord {get{return coord;}set{coord=value;}}
+		private Vector2 coord;
+		public Vector2 Coord {get{return coord;}set{coord=value;}}
 
-		public float x {get{return coord.x;}}
-		public float y {get{return coord.y;}}
+		public float x {get{return coord.X;}}
+		public float y {get{return coord.Y;}}
 
 		private float weigth;
 		public float Weigth {get{return weigth;}}
@@ -89,13 +88,13 @@ namespace csDelaunay {
 		// which end of each edge hooks up with the previous edge in edges:
 		private List<LR> edgeOrientations;
 		// ordered list of points that define the region clipped to bounds:
-		private List<Vector2f> region;
+		private List<Vector2> region;
 
-		public Site(Vector2f p, int index, float weigth) {
+		public Site(Vector2 p, int index, float weigth) {
 			Init(p, index, weigth);
 		}
 
-		private Site Init(Vector2f p, int index, float weigth) {
+		private Site Init(Vector2 p, int index, float weigth) {
 			coord = p;
 			siteIndex = index;
 			this.weigth = weigth;
@@ -109,7 +108,7 @@ namespace csDelaunay {
 			return "Site " + siteIndex + ": " + coord;
 		}
 
-		private void Move(Vector2f p) {
+		private void Move(Vector2 p) {
 			Clear();
 			coord = p;
 		}
@@ -167,9 +166,9 @@ namespace csDelaunay {
 			return null;
 		}
 
-		public List<Vector2f> Region(Rectf clippingBounds) {
+		public List<Vector2> Region(Rectf clippingBounds) {
 			if (edges == null || edges.Count == 0) {
-				return new List<Vector2f>();
+				return new List<Vector2>();
 			}
 			if (edgeOrientations == null) {
 				ReorderEdges();
@@ -188,8 +187,8 @@ namespace csDelaunay {
 			reorderer.Dispose();
 		}
 
-		private List<Vector2f> ClipToBounds(Rectf bounds) {
-			List<Vector2f> points = new List<Vector2f>();
+		private List<Vector2> ClipToBounds(Rectf bounds) {
+			List<Vector2> points = new List<Vector2>();
 			int n = edges.Count;
 			int i = 0;
 			Edge edge;
@@ -200,7 +199,7 @@ namespace csDelaunay {
 
 			if (i == n) {
 				// No edges visible
-				return new List<Vector2f>();
+				return new List<Vector2>();
 			}
 			edge = edges[i];
 			LR orientation = edgeOrientations[i];
@@ -220,18 +219,18 @@ namespace csDelaunay {
 			return points;
 		}
 
-		private void Connect(ref List<Vector2f> points, int j, Rectf bounds, bool closingUp = false) {
-			Vector2f rightPoint = points[points.Count-1];
+		private void Connect(ref List<Vector2> points, int j, Rectf bounds, bool closingUp = false) {
+			Vector2 rightPoint = points[points.Count-1];
 			Edge newEdge = edges[j];
 			LR newOrientation = edgeOrientations[j];
 
 			// The point that must be conected to rightPoint:
-			Vector2f newPoint = newEdge.ClippedEnds[newOrientation];
+			Vector2 newPoint = newEdge.ClippedEnds[newOrientation];
 
 			if (!CloseEnough(rightPoint, newPoint)) {
 				// The points do not coincide, so they must have been clipped at the bounds;
 				// see if they are on the same border of the bounds:
-				if (rightPoint.x != newPoint.x && rightPoint.y != newPoint.y) {
+				if (rightPoint.X != newPoint.X && rightPoint.Y != newPoint.Y) {
 					// They are on different borders of the bounds;
 					// insert one or two corners of bounds as needed to hook them up:
 					// (NOTE this will not be correct if the region should take up more than
@@ -245,80 +244,80 @@ namespace csDelaunay {
 
 						if ((newCheck & BoundsCheck.BOTTOM) != 0) {
 							py = bounds.bottom;
-							points.Add(new Vector2f(px,py));
+							points.Add(new Vector2(px,py));
 
 						} else if ((newCheck & BoundsCheck.TOP) != 0) {
 							py = bounds.top;
-							points.Add(new Vector2f(px,py));
+							points.Add(new Vector2(px,py));
 
 						} else if ((newCheck & BoundsCheck.LEFT) != 0) {
-							if (rightPoint.y - bounds.y + newPoint.y - bounds.y < bounds.height) {
+							if (rightPoint.Y - bounds.y + newPoint.Y - bounds.y < bounds.height) {
 								py = bounds.top;
 							} else {
 								py = bounds.bottom;
 							}
-							points.Add(new Vector2f(px,py));
-							points.Add(new Vector2f(bounds.left, py));
+							points.Add(new Vector2(px,py));
+							points.Add(new Vector2(bounds.left, py));
 						}
 					} else if ((rightCheck & BoundsCheck.LEFT) != 0) {
 						px = bounds.left;
 
 						if ((newCheck & BoundsCheck.BOTTOM) != 0) {
 							py = bounds.bottom;
-							points.Add(new Vector2f(px,py));
+							points.Add(new Vector2(px,py));
 
 						} else if ((newCheck & BoundsCheck.TOP) != 0) {
 							py = bounds.top;
-							points.Add(new Vector2f(px,py));
+							points.Add(new Vector2(px,py));
 
 						} else if ((newCheck & BoundsCheck.RIGHT) != 0) {
-							if (rightPoint.y - bounds.y + newPoint.y - bounds.y < bounds.height) {
+							if (rightPoint.Y - bounds.y + newPoint.Y - bounds.y < bounds.height) {
 								py = bounds.top;
 							} else {
 								py = bounds.bottom;
 							}
-							points.Add(new Vector2f(px,py));
-							points.Add(new Vector2f(bounds.right, py));
+							points.Add(new Vector2(px,py));
+							points.Add(new Vector2(bounds.right, py));
 						}
 					} else if ((rightCheck & BoundsCheck.TOP) != 0) {
 						py = bounds.top;
 
 						if ((newCheck & BoundsCheck.RIGHT) != 0) {
 							px = bounds.right;
-							points.Add(new Vector2f(px,py));
+							points.Add(new Vector2(px,py));
 
 						} else if ((newCheck & BoundsCheck.LEFT) != 0) {
 							px = bounds.left;
-							points.Add(new Vector2f(px,py));
+							points.Add(new Vector2(px,py));
 
 						} else if ((newCheck & BoundsCheck.BOTTOM) != 0) {
-							if (rightPoint.x - bounds.x + newPoint.x - bounds.x < bounds.width) {
+							if (rightPoint.X - bounds.x + newPoint.X - bounds.x < bounds.width) {
 								px = bounds.left;
 							} else {
 								px = bounds.right;
 							}
-							points.Add(new Vector2f(px,py));
-							points.Add(new Vector2f(px, bounds.bottom));
+							points.Add(new Vector2(px,py));
+							points.Add(new Vector2(px, bounds.bottom));
 						}
 					} else if ((rightCheck & BoundsCheck.BOTTOM) != 0) {
 						py = bounds.bottom;
 						
 						if ((newCheck & BoundsCheck.RIGHT) != 0) {
 							px = bounds.right;
-							points.Add(new Vector2f(px,py));
+							points.Add(new Vector2(px,py));
 							
 						} else if ((newCheck & BoundsCheck.LEFT) != 0) {
 							px = bounds.left;
-							points.Add(new Vector2f(px,py));
+							points.Add(new Vector2(px,py));
 							
 						} else if ((newCheck & BoundsCheck.TOP) != 0) {
-							if (rightPoint.x - bounds.x + newPoint.x - bounds.x < bounds.width) {
+							if (rightPoint.X - bounds.x + newPoint.X - bounds.x < bounds.width) {
 								px = bounds.left;
 							} else {
 								px = bounds.right;
 							}
-							points.Add(new Vector2f(px,py));
-							points.Add(new Vector2f(px, bounds.top));
+							points.Add(new Vector2(px,py));
+							points.Add(new Vector2(px, bounds.top));
 						}
 					}
 				}
@@ -328,14 +327,14 @@ namespace csDelaunay {
 				}
 				points.Add(newPoint);
 			}
-			Vector2f newRightPoint = newEdge.ClippedEnds[LR.Other(newOrientation)];
+			Vector2 newRightPoint = newEdge.ClippedEnds[LR.Other(newOrientation)];
 			if (!CloseEnough(points[0], newRightPoint)) {
 				points.Add(newRightPoint);
 			}
 		}
 
 		public float Dist(ICoord p) {
-			return (this.Coord - p.Coord).magnitude;
+			return (this.Coord - p.Coord).Length();
 		}
 	}
 
@@ -351,18 +350,18 @@ namespace csDelaunay {
 		 * @param bounds
 		 * @return an int with the appropriate bits set if the Point lies on the corresponding bounds lines
 		 */
-		public static int Check(Vector2f point, Rectf bounds) {
+		public static int Check(Vector2 point, Rectf bounds) {
 			int value = 0;
-			if (point.x == bounds.left) {
+			if (point.X == bounds.left) {
 				value |= LEFT;
 			}
-			if (point.x == bounds.right) {
+			if (point.X == bounds.right) {
 				value |= RIGHT;
 			}
-			if (point.y == bounds.top) {
+			if (point.Y == bounds.top) {
 				value |= TOP;
 			}
-			if (point.y == bounds.bottom) {
+			if (point.Y == bounds.bottom) {
 				value |= BOTTOM;
 			}
 
