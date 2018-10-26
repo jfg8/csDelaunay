@@ -1,0 +1,4 @@
+RESTRICTION: >= net461
+NUGET
+  remote: https://api.nuget.org/v3/index.json
+    System.Numerics.Vectors (4.5)

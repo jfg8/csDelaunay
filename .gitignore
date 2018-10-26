@@ -253,7 +253,7 @@ FakesAssemblies/
 _Pvt_Extensions
 
 # Paket dependency manager
-.paket/paket.exe
+# in magic mode .paket/paket.exe gets checked in
 paket-files/
 
 # FAKE - F# Make
