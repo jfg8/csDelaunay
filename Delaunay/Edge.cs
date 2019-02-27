@@ -3,22 +3,16 @@ using System.Numerics;
 
 namespace csDelaunay {
 
-	/*
-	 * The line segment connecting the two Sites is part of the Delaunay triangulation
-	 * The line segment connecting the two Vertices is part of the Voronoi diagram
-	 */
+	/// <summary> The line segment connecting the two Sites is part of the Delaunay triangulation
+	/// The line segment connecting the two Vertices is part of the Voronoi diagram </summary>
 	public class Edge {
 
 		#region Pool
 		private static Queue<Edge> pool = new Queue<Edge>();
 		
 		private static int nEdges = 0;
-		/*
-		 * This is the only way to create a new Edge
-		 * @param site0
-		 * @param site1
-		 * @return
-		 */
+		
+		/// <summary> This is the only way to create a new Edge </summary>
 		public static Edge CreateBisectingEdge(Site s0, Site s1) {
 			float dx, dy;
 			float absdx, absdy;
