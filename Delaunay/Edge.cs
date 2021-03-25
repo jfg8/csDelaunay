@@ -42,7 +42,7 @@ namespace csDelaunay {
 				c/= dy;
 			}
 
-			Edge edge = Edge.Create();
+			Edge edge = Create();
 
 			edge.LeftSite = s0;
 			edge.RightSite = s1;

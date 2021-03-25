@@ -59,7 +59,7 @@ namespace csDelaunay {
         {
 			foreach (var edge in a.Edges)
 			{
-				if (edge.LeftSite == b || edge.RightSite == b)
+				if (edge.LeftSite.Equals(b) || edge.RightSite.Equals(b))
 					return edge;
 			}
 
@@ -306,10 +306,7 @@ namespace csDelaunay {
 			foreach (Edge e in edges) {
 				e.ClipVertices(plotBounds);
 			}
-			// But we don't actually ever use them again!
-			foreach (Vertex ve in vertices) {
-				ve.Dispose();
-			}
+
 			vertices.Clear();
 		}
 
