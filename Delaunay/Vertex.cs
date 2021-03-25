@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace csDelaunay {
 
@@ -29,8 +29,8 @@ namespace csDelaunay {
 		private Vector2 coord;
 		public Vector2 Coord {get{return coord;}set{coord=value;}}
 
-		public float x {get{return coord.x;}}
-		public float y {get{return coord.y;}}
+		public float X {get{return coord.x;}}
+		public float Y {get{return coord.y;}}
 
 		private int vertexIndex;
 		public int VertexIndex {get{return vertexIndex;}}
@@ -97,7 +97,7 @@ namespace csDelaunay {
 				halfedge = halfedge1;
 				edge = edge1;
 			}
-			rightOfSite = intersectionX >= edge.RightSite.x;
+			rightOfSite = intersectionX >= edge.RightSite.X;
 			if ((rightOfSite && halfedge.leftRight == LR.LEFT) ||
 				(!rightOfSite && halfedge.leftRight == LR.RIGHT)) {
 				return null;

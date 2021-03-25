@@ -42,26 +42,26 @@ namespace csDelaunay {
 			}
 		}
 
-		public Rectf GetSitesBounds() {
+		public Rect GetSitesBounds() {
 			if (!sorted) {
 				SortList();
 				ResetListIndex();
 			}
 			float xmin, xmax, ymin, ymax;
 			if (sites.Count == 0) {
-				return Rectf.zero;
+				return Rect.zero;
 			}
 			xmin = float.MaxValue;
 			xmax = float.MinValue;
 			foreach (Site site in sites) {
-				if (site.x < xmin) xmin = site.x;
-				if (site.x > xmax) xmax = site.x;
+				if (site.X < xmin) xmin = site.X;
+				if (site.X > xmax) xmax = site.X;
 			}
 			// here's where we assume that the sites have been sorted on y:
-			ymin = sites[0].y;
-			ymax = sites[sites.Count-1].y;
+			ymin = sites[0].Y;
+			ymax = sites[sites.Count-1].Y;
 
-			return new Rectf(xmin, ymin, xmax - xmin, ymax - ymin);
+			return new Rect(xmin, ymin, xmax - xmin, ymax - ymin);
 		}
 
 		public List<Vector2> SiteCoords() {
@@ -85,12 +85,12 @@ namespace csDelaunay {
 				Edge nearestEdge = site.NearestEdge();
 
 				if (!nearestEdge.IsPartOfConvexHull()) radius = nearestEdge.SitesDistance() * 0.5f;
-				circles.Add(new Circle(site.x,site.y, radius));
+				circles.Add(new Circle(site.X,site.Y, radius));
 			}
 			return circles;
 		}
 
-		public List<List<Vector2>> Regions(Rectf plotBounds) {
+		public List<List<Vector2>> Regions(Rect plotBounds) {
 			List<List<Vector2>> regions = new List<List<Vector2>>();
 			foreach (Site site in sites) {
 				regions.Add(site.Region(plotBounds));

@@ -81,7 +81,7 @@ namespace csDelaunay {
 			float dxp, dyp, dxs, t1, t2, t3, y1;
 
 			topSite = edge.RightSite;
-			rightOfSite = p.x > topSite.x;
+			rightOfSite = p.x > topSite.X;
 			if (rightOfSite && this.leftRight == LR.LEFT) {
 				return true;
 			}
@@ -90,8 +90,8 @@ namespace csDelaunay {
 			}
 
 			if (edge.a == 1) {
-				dyp = p.y - topSite.y;
-				dxp = p.x - topSite.x;
+				dyp = p.y - topSite.Y;
+				dxp = p.x - topSite.X;
 				fast = false;
 				if ((!rightOfSite && edge.b < 0) || (rightOfSite && edge.b >= 0)) {
 					above = dyp >= edge.b * dxp;
@@ -106,7 +106,7 @@ namespace csDelaunay {
 					}
 				}
 				if (!fast) {
-					dxs = topSite.x - edge.LeftSite.x;
+					dxs = topSite.X - edge.LeftSite.X;
 					above = edge.b * (dxp * dxp - dyp * dyp) < dxs * dyp * (1+2 * dxp/dxs + edge.b * edge.b);
 					if (edge.b < 0) {
 						above = !above;
@@ -115,8 +115,8 @@ namespace csDelaunay {
 			} else {
 				y1 = edge.c - edge.a * p.x;
 				t1 = p.y - y1;
-				t2 = p.x - topSite.x;
-				t3 = y1 - topSite.y;
+				t2 = p.x - topSite.X;
+				t3 = y1 - topSite.Y;
 				above = t1 * t1 > t2 * t2 + t3 * t3;
 			}
 			return this.leftRight == LR.LEFT ? above : !above;
