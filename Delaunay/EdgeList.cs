@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace csDelaunay {
 
@@ -77,7 +78,7 @@ namespace csDelaunay {
 		 * @param p
 		 * @return
 		 */
-		public Halfedge EdgeListLeftNeighbor(Vector2f p) {
+		public Halfedge EdgeListLeftNeighbor(Vector2 p) {
 			int bucket;
 			Halfedge halfedge;
 

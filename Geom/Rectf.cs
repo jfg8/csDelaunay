@@ -43,15 +43,15 @@ public struct Rectf {
 		}
 	}
 
-	public Vector2f topLeft {
+	public Vector2 topLeft {
 		get {
-			return new Vector2f(left, top);
+			return new Vector2(left, top);
 		}
 	}
 
-	public Vector2f bottomRight {
+	public Vector2 bottomRight {
 		get {
-			return new Vector2f(right, bottom);
+			return new Vector2(right, bottom);
 		}
 	}
 }

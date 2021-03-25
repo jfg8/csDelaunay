@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace csDelaunay {
 
@@ -74,7 +75,7 @@ namespace csDelaunay {
 			pool.Enqueue(this);
 		}
 
-		public bool IsLeftOf(Vector2f p) {
+		public bool IsLeftOf(Vector2 p) {
 			Site topSite;
 			bool rightOfSite, above, fast;
 			float dxp, dyp, dxs, t1, t2, t3, y1;
