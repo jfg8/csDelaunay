@@ -1,0 +1,1 @@
+dotnet build csDelaunay.sln -c Release

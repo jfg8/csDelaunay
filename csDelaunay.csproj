@@ -7,7 +7,7 @@
     <PackageId>csDelaunay</PackageId>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup>
   <Import Project=".paket\Paket.Restore.targets" />
 </Project>
