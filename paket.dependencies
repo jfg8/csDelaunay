@@ -1,0 +1,4 @@
+source https://api.nuget.org/v3/index.json
+framework: >= netstandard2.0
+
+nuget System.Numerics.Vectors ~> 4.5.0
