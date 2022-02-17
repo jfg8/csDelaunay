@@ -132,8 +132,8 @@ namespace csDelaunay {
 
 		// Once clipVertices() is called, this Disctinary will hold two Points
 		// representing the clipped coordinates of the left and the right ends...
-		private Dictionary<LR, Vector2f> clippedVertices;
-		public Dictionary<LR, Vector2f> ClippedEnds {get{return clippedVertices;}}
+		private LRCollection<Vector2f> clippedVertices;
+		public LRCollection<Vector2f> ClippedEnds {get{return clippedVertices;}}
 
 		// Unless the entire Edge is outside the bounds.
 		// In that case visible will be false:
@@ -142,7 +142,7 @@ namespace csDelaunay {
 		}
 
 		// The two input Sites for which this Edge is a bisector:
-		private Dictionary<LR, Site> sites;
+		private LRCollection<Site> sites;
 		public Site LeftSite {get{return sites[LR.LEFT];} set{sites[LR.LEFT]=value;}}
 		public Site RightSite {get{return sites[LR.RIGHT];} set{sites[LR.RIGHT]=value;}}
 
@@ -172,7 +172,7 @@ namespace csDelaunay {
 		}
 
 		public Edge Init() {
-			sites = new Dictionary<LR, Site>();
+			sites = new LRCollection<Site>();
 
 			return this;
 		}
@@ -283,7 +283,7 @@ namespace csDelaunay {
 				}
 			}
 
-			clippedVertices = new Dictionary<LR, Vector2f>();
+			clippedVertices = new LRCollection<Vector2f>();
 			if (vertex0 == leftVertex) {
 				clippedVertices[LR.LEFT] = new Vector2f(x0, y0);
 				clippedVertices[LR.RIGHT] = new Vector2f(x1, y1);
