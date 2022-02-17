@@ -3,7 +3,7 @@
     <Version>1.1.0.0</Version>
     <AssemblyVersion>1.1.0.0</AssemblyVersion>
     <FileVersion>1.1.0.0</FileVersion>
-    <Authors>PouletFrit, frabert, charlieturndorf</Authors>
+    <Authors>PouletFrit</Authors>
     <Product>csDelaunay</Product>
     <Copyright>Copyright © PouletFrit 2014 (MIT license)</Copyright>
   </PropertyGroup>
