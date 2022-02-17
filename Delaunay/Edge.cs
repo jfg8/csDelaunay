@@ -9,9 +9,9 @@ namespace csDelaunay {
 
 		#region Pool
 		private static Queue<Edge> pool = new Queue<Edge>();
-		
+
 		private static int nEdges = 0;
-		
+
 		/// <summary> This is the only way to create a new Edge </summary>
 		public static Edge CreateBisectingEdge(Site s0, Site s1) {
 			float dx, dy;
@@ -125,8 +125,8 @@ namespace csDelaunay {
 
 		// Once clipVertices() is called, this Disctinary will hold two Points
 		// representing the clipped coordinates of the left and the right ends...
-		private Dictionary<LR, Vector2> clippedVertices;
-		public Dictionary<LR, Vector2> ClippedEnds {get{return clippedVertices;}}
+		private LRCollection<Vector2> clippedVertices;
+		public LRCollection<Vector2> ClippedEnds {get{return clippedVertices;}}
 
 		// Unless the entire Edge is outside the bounds.
 		// In that case visible will be false:
@@ -135,7 +135,7 @@ namespace csDelaunay {
 		}
 
 		// The two input Sites for which this Edge is a bisector:
-		private Dictionary<LR, Site> sites;
+		private LRCollection<Site> sites;
 		public Site LeftSite {get{return sites[LR.LEFT];} set{sites[LR.LEFT]=value;}}
 		public Site RightSite {get{return sites[LR.RIGHT];} set{sites[LR.RIGHT]=value;}}
 
@@ -165,7 +165,7 @@ namespace csDelaunay {
 		}
 
 		public Edge Init() {
-			sites = new Dictionary<LR, Site>();
+			sites = new LRCollection<Site>();
 
 			return this;
 		}
@@ -180,7 +180,7 @@ namespace csDelaunay {
 		 * Set clippedVertices to contain the two ends of the portion of the Voronoi edge that is visible
 		 * within the bounds. If no part of the Edge falls within the bounds, leave clippedVertices null
 		 * @param bounds
-		 */ 
+		 */
 		public void ClipVertices(Rectf bounds) {
 			float xmin = bounds.x;
 			float ymin = bounds.y;
@@ -276,7 +276,7 @@ namespace csDelaunay {
 				}
 			}
 
-			clippedVertices = new Dictionary<LR, Vector2>();
+			clippedVertices = new LRCollection<Vector2>();
 			if (vertex0 == leftVertex) {
 				clippedVertices[LR.LEFT] = new Vector2(x0, y0);
 				clippedVertices[LR.RIGHT] = new Vector2(x1, y1);

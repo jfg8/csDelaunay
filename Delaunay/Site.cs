@@ -172,6 +172,8 @@ namespace csDelaunay {
 			}
 			if (edgeOrientations == null) {
 				ReorderEdges();
+			}
+			if (region == null) {
 				region = ClipToBounds(clippingBounds);
 				if ((new Polygon(region)).PolyWinding() == Winding.CLOCKWISE) {
 					region.Reverse();
