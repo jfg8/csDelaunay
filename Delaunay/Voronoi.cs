@@ -7,7 +7,7 @@ namespace csDelaunay {
 
 	public class Voronoi {
 
-		private SiteList siteList;
+		public SiteList sites;
 		private List<Triangle> triangles;
 
 		private List<Edge> edges;
@@ -24,8 +24,8 @@ namespace csDelaunay {
 		private Random weigthDistributor;
 
 		public void Dispose() {
-			siteList.Dispose();
-			siteList = null;
+			sites.Dispose();
+			sites = null;
 
 			foreach (Triangle t in triangles) {
 				t.Dispose();
@@ -53,7 +53,7 @@ namespace csDelaunay {
 			LloydRelaxation(lloydIterations);
 		}
 
-		public List<Site> Sites => siteList.sites;
+		public List<Site> Sites => sites.sites;
 
 		public Edge FindEdgeFromAdjacentPolygons(Site a, Site b)
         {
@@ -67,7 +67,7 @@ namespace csDelaunay {
         }
 
 		private void Init(List<Vector2> points, Rect plotBounds) {
-			siteList = new SiteList();
+			sites = new SiteList();
 			sitesIndexedByLocation = new Dictionary<Vector2, Site>();
 			AddSites(points);
 			this.plotBounds = plotBounds;
@@ -83,51 +83,15 @@ namespace csDelaunay {
 			}
 		}
 
-		private void AddSite(Vector2 p, int index) {
-			float weigth = (float)weigthDistributor.NextDouble() * 100;
-			Site site = Site.Create(p, index, weigth);
-			siteList.Add(site);
-			sitesIndexedByLocation[p] = site;
-		}
-
-		public List<Vector2> Region (Vector2 p) {
-            if (sitesIndexedByLocation.TryGetValue(p, out Site site))
-            {
-                return site.Region(plotBounds);
-            }
-            else
-            {
-                return new List<Vector2>();
-            }
+        private void AddSite(Vector2 p, int index)
+        {
+            float weigth = (float)weigthDistributor.NextDouble() * 100;
+            Site site = Site.Create(p, index, weigth);
+            sites.Add(site);
+            sitesIndexedByLocation[p] = site;
         }
 
-		public List<Vector2> NeighborSiteCoordsForSite(Vector2 coord) {
-			List<Vector2> points = new List<Vector2>();
-            if (sitesIndexedByLocation.TryGetValue(coord, out var site))
-            {
-                List<Site> sites = site.NeighborSites();
-                foreach (Site neighbor in sites)
-                {
-                    points.Add(neighbor.Coord);
-                }
-            }
-
-            return points;
-		}
-
-		public List<Circle> Circles() {
-			return siteList.Circles();
-		}
-
-		public List<LineSegment> VoronoiBoundarayForSite(Vector2 coord) {
-			return LineSegment.VisibleLineSegments(Edge.SelectEdgesForSitePoint(coord, edges));
-		}
-		/*
-		public List<LineSegment> DelaunayLinesForSite(Vector2 coord) {
-			return DelaunayLinesForEdges(Edge.SelectEdgesForSitePoint(coord, edges));
-		}*/
-
-		public List<LineSegment> VoronoiDiagram() {
+        public List<LineSegment> VoronoiDiagram() {
 			return LineSegment.VisibleLineSegments(edges);
 		}
 		/*
@@ -162,11 +126,11 @@ namespace csDelaunay {
 		}
 
 		public List<List<Vector2>> Regions() {
-			return siteList.Regions(plotBounds);
+			return sites.Regions(plotBounds);
 		}
 
 		public List<Vector2> SiteCoords() {
-			return siteList.SiteCoords();
+			return sites.SiteCoords();
 		}
 
 		private void FortunesAlgorithm() {
@@ -177,16 +141,16 @@ namespace csDelaunay {
 			Halfedge lbnd, rbnd, llbnd, rrbnd, bisector;
 			Edge edge;
 
-			Rect dataBounds = siteList.GetSitesBounds();
+			Rect dataBounds = sites.GetSitesBounds();
 
-			int sqrtSitesNb = (int)Math.Sqrt(siteList.Count() + 4);
+			int sqrtSitesNb = (int)Math.Sqrt(sites.Count() + 4);
 			HalfedgePriorityQueue heap = new HalfedgePriorityQueue(dataBounds.y, dataBounds.height, sqrtSitesNb);
 			EdgeList edgeList = new EdgeList(dataBounds.x, dataBounds.width, sqrtSitesNb);
 			List<Halfedge> halfEdges = new List<Halfedge>();
 			List<Vertex> vertices = new List<Vertex>();
 
-			Site bottomMostSite = siteList.Next();
-			newSite = siteList.Next();
+			Site bottomMostSite = sites.Next();
+			newSite = sites.Next();
 
 			while (true) {
 				if (!heap.Empty()) {
@@ -242,7 +206,7 @@ namespace csDelaunay {
 						heap.Insert(bisector);
 					}
 
-					newSite = siteList.Next();
+					newSite = sites.Next();
 				} else if (!heap.Empty()) {
 					// Intersection is smallest
 					lbnd = heap.ExtractMin();
@@ -306,7 +270,10 @@ namespace csDelaunay {
 			foreach (Edge e in edges) {
 				e.ClipVertices(plotBounds);
 			}
-
+			// But we don't actually ever use them again!
+			foreach (Vertex ve in vertices) {
+				ve.Dispose();
+			}
 			vertices.Clear();
 		}
 
@@ -315,14 +282,14 @@ namespace csDelaunay {
 			for (int i = 0; i < nbIterations; i++) {
 				List<Vector2> newPoints = new List<Vector2>();
 				// Go thourgh all sites
-				siteList.ResetListIndex();
-				Site site = siteList.Next();
+				sites.ResetListIndex();
+				Site site = sites.Next();
 
 				while (site != null) {
 					// Loop all corners of the site to calculate the centroid
 					List<Vector2> region = site.Region(plotBounds);
 					if (region.Count < 1) {
-						site = siteList.Next();
+						site = sites.Next();
 						continue;
 					}
 					
@@ -359,7 +326,7 @@ namespace csDelaunay {
 					centroid.y /= (6*signedArea);
 					// Move site to the centroid of its Voronoi cell
 					newPoints.Add(centroid);
-					site = siteList.Next();
+					site = sites.Next();
 				}
 
 				// Between each replacement of the cendroid of the cell,
