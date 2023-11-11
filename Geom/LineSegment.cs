@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Numerics;
 
 namespace csDelaunay {
 
@@ -10,8 +10,8 @@ namespace csDelaunay {
 
 			foreach (Edge edge in edges) {
 				if (edge.Visible()) {
-					Vector2f p1 = edge.ClippedEnds[LR.LEFT];
-					Vector2f p2 = edge.ClippedEnds[LR.RIGHT];
+					Vector2 p1 = edge.ClippedEnds[LR.LEFT];
+					Vector2 p2 = edge.ClippedEnds[LR.RIGHT];
 					segments.Add(new LineSegment(p1,p2));
 				}
 			}
@@ -20,8 +20,8 @@ namespace csDelaunay {
 		}
 
 		public static float CompareLengths_MAX(LineSegment segment0, LineSegment segment1) {
-			float length0 = (segment0.p0 - segment0.p1).magnitude;
-			float length1 = (segment1.p0 - segment1.p1).magnitude;
+			float length0 = (segment0.p0 - segment0.p1).Length();
+			float length1 = (segment1.p0 - segment1.p1).Length();
 			if (length0 < length1) {
 				return 1;
 			}
@@ -35,10 +35,10 @@ namespace csDelaunay {
 			return - CompareLengths_MAX(edge0, edge1);
 		}
 
-		public Vector2f p0;
-		public Vector2f p1;
+		public Vector2 p0;
+		public Vector2 p1;
 
-		public LineSegment (Vector2f p0, Vector2f p1) {
+		public LineSegment (Vector2 p0, Vector2 p1) {
 			this.p0 = p0;
 			this.p1 = p1;
 		}

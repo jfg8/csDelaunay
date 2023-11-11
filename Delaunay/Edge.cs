@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Numerics;
 
 namespace csDelaunay {
 
-	/*
-	 * The line segment connecting the two Sites is part of the Delaunay triangulation
-	 * The line segment connecting the two Vertices is part of the Voronoi diagram
-	 */
+	/// <summary> The line segment connecting the two Sites is part of the Delaunay triangulation
+	/// The line segment connecting the two Vertices is part of the Voronoi diagram </summary>
 	public class Edge {
 
 		#region Pool
 		private static Queue<Edge> pool = new Queue<Edge>();
-		
+
 		private static int nEdges = 0;
-		/*
-		 * This is the only way to create a new Edge
-		 * @param site0
-		 * @param site1
-		 * @return
-		 */
+
+		/// <summary> This is the only way to create a new Edge </summary>
 		public static Edge CreateBisectingEdge(Site s0, Site s1) {
 			float dx, dy;
 			float absdx, absdy;
@@ -68,7 +61,7 @@ namespace csDelaunay {
 		}
 		#endregion
 
-		public static List<Edge> SelectEdgesForSitePoint(Vector2f coord, List<Edge> edgesToTest) {
+		public static List<Edge> SelectEdgesForSitePoint(Vector2 coord, List<Edge> edgesToTest) {
 			return edgesToTest.FindAll(
 			delegate(Edge e) {
 				if (e.LeftSite != null) {
@@ -111,7 +104,7 @@ namespace csDelaunay {
 		}
 
 		public float SitesDistance() {
-			return (LeftSite.Coord - RightSite.Coord).magnitude;
+			return (LeftSite.Coord - RightSite.Coord).Length();
 		}
 
 		public static int CompareSitesDistances_MAX(Edge edge0, Edge edge1) {
@@ -132,8 +125,8 @@ namespace csDelaunay {
 
 		// Once clipVertices() is called, this Disctinary will hold two Points
 		// representing the clipped coordinates of the left and the right ends...
-		private LRCollection<Vector2f> clippedVertices;
-		public LRCollection<Vector2f> ClippedEnds {get{return clippedVertices;}}
+		private LRCollection<Vector2> clippedVertices;
+		public LRCollection<Vector2> ClippedEnds {get{return clippedVertices;}}
 
 		// Unless the entire Edge is outside the bounds.
 		// In that case visible will be false:
@@ -187,7 +180,7 @@ namespace csDelaunay {
 		 * Set clippedVertices to contain the two ends of the portion of the Voronoi edge that is visible
 		 * within the bounds. If no part of the Edge falls within the bounds, leave clippedVertices null
 		 * @param bounds
-		 */ 
+		 */
 		public void ClipVertices(Rectf bounds) {
 			float xmin = bounds.x;
 			float ymin = bounds.y;
@@ -283,13 +276,13 @@ namespace csDelaunay {
 				}
 			}
 
-			clippedVertices = new LRCollection<Vector2f>();
+			clippedVertices = new LRCollection<Vector2>();
 			if (vertex0 == leftVertex) {
-				clippedVertices[LR.LEFT] = new Vector2f(x0, y0);
-				clippedVertices[LR.RIGHT] = new Vector2f(x1, y1);
+				clippedVertices[LR.LEFT] = new Vector2(x0, y0);
+				clippedVertices[LR.RIGHT] = new Vector2(x1, y1);
 			} else {
-				clippedVertices[LR.RIGHT] = new Vector2f(x0, y0);
-				clippedVertices[LR.LEFT] = new Vector2f(x1, y1);
+				clippedVertices[LR.RIGHT] = new Vector2(x0, y0);
+				clippedVertices[LR.LEFT] = new Vector2(x1, y1);
 			}
 		}
 		#endregion
